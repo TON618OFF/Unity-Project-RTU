@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Lava : MonoBehaviour
 {
-    public int damagePerSecond = 10; // Урон, который наносится каждую секунду
+    public int damagePerSecond = 10;
     private GameManager _GameManager;
     private bool playerInLava = false;
 
@@ -18,7 +18,7 @@ public class Lava : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("OnTriggerEnter работает");
+            Debug.Log("OnTriggerEnter Г°Г ГЎГ®ГІГ ГҐГІ");
             playerInLava = true;
             StartCoroutine(ApplyDamageOverTime());
         }
@@ -36,9 +36,9 @@ public class Lava : MonoBehaviour
     {
         while (playerInLava)
         {
-            Debug.Log("Наносится урон");
-            _GameManager.Healing(-damagePerSecond); // Наносим урон через отрицательное значение
-            yield return new WaitForSeconds(1f);  // Урон каждую секунду
+            Debug.Log("ГЌГ Г­Г®Г±ГЁГІГ±Гї ГіГ°Г®Г­");
+            _GameManager.Healing(-damagePerSecond);
+            yield return new WaitForSeconds(1f);
         }
     }
 }
