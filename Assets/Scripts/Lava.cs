@@ -5,8 +5,11 @@ using UnityEngine;
 
 public class Lava : MonoBehaviour
 {
+
     public int damagePerSecond = 10;
+
     private GameManager _GameManager;
+
     private bool playerInLava = false;
 
     private void Start()

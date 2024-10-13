@@ -57,7 +57,6 @@ public class GameManager : MonoBehaviour
             Health = 0;
             Debug.Log("Игрок умер!");
             ReloadLevel();
-            // Здесь можно добавить логику, например, перезапуск уровня или конец игры
         }
 
         Debug.Log("HP: " + Health);
