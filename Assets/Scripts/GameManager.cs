@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -40,5 +41,31 @@ public class GameManager : MonoBehaviour
     private void FixedUpdate()
     {
         StaminaCheck();
+    }
+
+    public void Healing(int HealthPointCount)
+    {
+        Health += HealthPointCount;
+
+        if (Health > MaxHealth)
+        {
+            Health = MaxHealth;
+        }
+
+        if (Health <= 0)
+        {
+            Health = 0;
+            Debug.Log("Игрок умер!");
+            ReloadLevel();
+            // Здесь можно добавить логику, например, перезапуск уровня или конец игры
+        }
+
+        Debug.Log("HP: " + Health);
+
+    }
+
+    private void ReloadLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

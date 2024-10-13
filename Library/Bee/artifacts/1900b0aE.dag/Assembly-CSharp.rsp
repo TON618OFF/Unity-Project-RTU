@@ -354,6 +354,8 @@
 -analyzer:"D:/Unity Editors/2022.3.47f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll"
 "Assets/Scripts/Camera Controller.cs"
 "Assets/Scripts/GameManager.cs"
+"Assets/Scripts/Lava.cs"
+"Assets/Scripts/MedKit Handler.cs"
 "Assets/Scripts/PlayerController.cs"
 -langversion:9.0
 /deterministic
