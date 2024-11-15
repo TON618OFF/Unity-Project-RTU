@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
 
     public int MaxHealth = 100;
 
-    private int Stamina = 100;
+    public int Stamina = 100;
 
     public bool IsStaminaRestoring = false;
 
@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
 
     private void StaminaCheck()
     {
-        Debug.Log("Стамина: " + Stamina);
+        //Debug.Log("Стамина: " + Stamina);
 
         if (Stamina <= 0) StartCoroutine(StaminaRestore());
     }

@@ -21,7 +21,7 @@ public class Lava : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("OnTriggerEnter ðàáîòàåò");
+            Debug.Log("OnTriggerEnter работает");
             playerInLava = true;
             StartCoroutine(ApplyDamageOverTime());
         }
@@ -39,7 +39,7 @@ public class Lava : MonoBehaviour
     {
         while (playerInLava)
         {
-            Debug.Log("Íàíîñèòñÿ óðîí");
+            Debug.Log("Игрок получает урон!");
             _GameManager.Healing(-damagePerSecond);
             yield return new WaitForSeconds(1f);
         }
