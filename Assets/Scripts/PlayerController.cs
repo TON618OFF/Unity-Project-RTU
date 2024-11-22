@@ -34,6 +34,10 @@ public class PlayerController : MonoBehaviour
 
     public float DistationToGround = 1.08f;
 
+    private AnimationManager _AnimationManager;
+
+    private bool IsSprinting = false;
+
     private void Start()
     {
         _Rigidbody = GetComponent<Rigidbody>();
@@ -46,28 +50,46 @@ public class PlayerController : MonoBehaviour
             _Weapon = WeaponInventory[SelectedWeaponId].GetComponent<Weapon>();
             WeaponMeshes[SelectedWeaponId].SetActive(true);
         }
+
+        _AnimationManager = WeaponMeshes[SelectedWeaponId].GetComponent<AnimationManager>();
     }
 
     public void PickupWeapon(GameObject newWeapon, GameObject weaponModel)
     {
+        // Добавление оружия и скина в списки
         WeaponInventory.Add(newWeapon);
         WeaponMeshes.Add(weaponModel);
 
+        Debug.Log($"Оружие добавлено: {newWeapon.name}");
+        Debug.Log($"Скин добавлен: {weaponModel.name}");
+
+        // Проверка наличия AnimationManager
+        SelectedWeaponId = WeaponMeshes.Count - 1; // Установите выбранное оружие как последнее добавленное
+        _Weapon = WeaponInventory[SelectedWeaponId].GetComponent<Weapon>();
+        _AnimationManager = WeaponMeshes[SelectedWeaponId].GetComponent<AnimationManager>();
+
+        if (_AnimationManager == null)
+        {
+            Debug.LogError($"AnimationManager не найден для оружия {WeaponMeshes[SelectedWeaponId].name}");
+        }
+
+        // Отключение коллайдера у оружия
         BoxCollider boxCollider = newWeapon.GetComponent<BoxCollider>();
         if (boxCollider != null)
         {
             boxCollider.enabled = false;
         }
 
+        // Настройка скина оружия
         weaponModel.transform.SetParent(HandMeshes.transform);
-
         weaponModel.transform.localPosition = new Vector3(0, 0.24f, 0.3f);
         weaponModel.transform.localRotation = Quaternion.identity;
-
-        weaponModel.SetActive(false);
+        weaponModel.SetActive(false); // Отключить объект, чтобы он не отображался сразу
 
         Debug.Log("Подобрано оружие: " + newWeapon.GetComponent<Weapon>().WeaponType);
     }
+
+
 
     private void Jump()
     {
@@ -81,6 +103,8 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 CalculateMovment()
     {
+        IsSprinting = false;
+
         float HorizontalDirection = Input.GetAxis("Horizontal");
         float VerticalDirection = Input.GetAxis("Vertical");
 
@@ -91,6 +115,8 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 CalculateSprint()
     {
+        IsSprinting = true;
+
         float HorizontalDirection = Input.GetAxis("Horizontal");
         float VerticalDirection = Input.GetAxis("Vertical");
 
@@ -103,11 +129,21 @@ public class PlayerController : MonoBehaviour
     {
         GroundCheck();
 
+        _AnimationManager = WeaponMeshes[SelectedWeaponId].GetComponent<AnimationManager>();
+
         if (Input.GetKey(KeyCode.Space) && IsGrounded) Jump();
 
-        if (Input.GetKey(KeyCode.Mouse0)) _Weapon.Fire();
+        if (Input.GetKey(KeyCode.Mouse0))
+        {
+            _Weapon.Fire();
+            _AnimationManager.SetAnimationFire();
+        }
 
-        if (Input.GetKey(KeyCode.R)) _Weapon.Reload();
+        if (Input.GetKey(KeyCode.R))
+        {
+            _Weapon.Reload();
+            _AnimationManager.SetAnimationReload();
+        }
 
         if (Input.GetAxis("Mouse ScrollWheel") > 0) SelectNextWeapon();
         else if (Input.GetAxis("Mouse ScrollWheel") < 0) SelectPrevWeapon();
@@ -123,6 +159,8 @@ public class PlayerController : MonoBehaviour
         }
 
         SetRotation();
+
+        SetAnimation();
     }
 
     private void OnDrawnGizmosSelected()
@@ -158,8 +196,11 @@ public class PlayerController : MonoBehaviour
             _Weapon = WeaponInventory[SelectedWeaponId].GetComponent<Weapon>();
             WeaponMeshes[SelectedWeaponId].SetActive(true);
 
+            _AnimationManager = WeaponMeshes[SelectedWeaponId].GetComponent<AnimationManager>();
+
             Debug.Log("Оружие: " + _Weapon.WeaponType);
         }
+
     }
 
     private void SelectPrevWeapon()
@@ -171,7 +212,34 @@ public class PlayerController : MonoBehaviour
             _Weapon = WeaponInventory[SelectedWeaponId].GetComponent<Weapon>();
             WeaponMeshes[SelectedWeaponId].SetActive(true);
 
+            _AnimationManager = WeaponMeshes[SelectedWeaponId].GetComponent<AnimationManager>();
+
             Debug.Log("Оружие: " + _Weapon.WeaponType);
         }
     }
+
+    private bool IsMoving()
+    {
+        return Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0;
+    }
+
+    private void SetAnimation()
+    {
+        if (_AnimationManager == null)
+        {
+            Debug.LogWarning("AnimationManager не назначен или равен null.");
+            return;
+        }
+
+        if (IsMoving())
+        {
+            if (IsSprinting) _AnimationManager.SetAnimationRun();
+            else _AnimationManager.SetAnimationWalk();
+        }
+        else
+        {
+            _AnimationManager.SetAnimationIdle();
+        }
+    }
+
 }

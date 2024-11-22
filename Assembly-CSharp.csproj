@@ -63,6 +63,7 @@
     <Compile Include="Assets\Scripts\WeaponEnum.cs" />
     <Compile Include="Assets\Scripts\Lava.cs" />
     <Compile Include="Assets\Scripts\MedKit Handler.cs" />
+    <Compile Include="Assets\Scripts\AnimationManager.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\TakeLootHandler.cs" />
     <Compile Include="Assets\Scripts\Weapon.cs" />
