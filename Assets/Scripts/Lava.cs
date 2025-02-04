@@ -1,27 +1,40 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Lava : MonoBehaviour
 {
-
-    public int damagePerSecond = 10;
-
+    public float damagePerSecond = 10f;
     private GameManager _GameManager;
+    public Slider HealthBar;
 
     private bool playerInLava = false;
 
     private void Start()
     {
         _GameManager = FindObjectOfType<GameManager>();
+
+        if (_GameManager == null)
+        {
+            Debug.LogError("GameManager не найден на сцене!");
+            return; 
+        }
+
+        if (HealthBar == null)
+        {
+            HealthBar = GameObject.Find("HealthBar")?.GetComponent<Slider>();
+            if (HealthBar == null)
+            {
+                Debug.LogError("HealthBar не найден в сцене!");
+            }
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("OnTriggerEnter работает");
+            Debug.Log("Игрок вошел в лаву");
             playerInLava = true;
             StartCoroutine(ApplyDamageOverTime());
         }
@@ -39,8 +52,17 @@ public class Lava : MonoBehaviour
     {
         while (playerInLava)
         {
-            Debug.Log("Игрок получает урон!");
-            _GameManager.Healing(-damagePerSecond);
+            if (_GameManager != null)
+            {
+                Debug.Log("Игрок получает урон от лавы!");
+                _GameManager.TakeDamage(damagePerSecond);
+            }
+            else
+            {
+                Debug.Log("GameManager не инициализирован!");
+                yield break;
+            }
+
             yield return new WaitForSeconds(1f);
         }
     }

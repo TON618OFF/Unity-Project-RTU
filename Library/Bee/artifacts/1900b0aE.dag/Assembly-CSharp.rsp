@@ -357,6 +357,8 @@
 "Assets/Scripts/Lava.cs"
 "Assets/Scripts/MedKit Handler.cs"
 "Assets/Scripts/PlayerController.cs"
+"Assets/Scripts/SceneLoader.cs"
+"Assets/Scripts/Settings.cs"
 "Assets/Scripts/TakeLootHandler.cs"
 "Assets/Scripts/Weapon.cs"
 "Assets/Scripts/WeaponEnum.cs"
